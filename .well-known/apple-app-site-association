@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["R7J5UV7AWE.dev.woodchuck.colorpuzzle"],
+        "paths": ["*"]
+      }
+    ]
+  }
+}
