@@ -6,5 +6,10 @@
         "paths": ["*"]
       }
     ]
+  },
+  "appclips": {
+    "apps": [
+      "R7J5UV7AWE.dev.woodchuck.colorpuzzle.Clip"
+    ]
   }
 }
