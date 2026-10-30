@@ -1,0 +1,475 @@
+/* Colors are the app's: StyleGuide backgrounds and the default theme's six
+   slots (PRD-0010), light and dark. */
+:root {
+  color-scheme: light dark;
+  --background: #ececec;
+  --surface: #ffffff;
+  --board: #c6c6c6;
+  --text: #000000;
+  --text-secondary: #5c5c60;
+  --line: rgba(0, 0, 0, 0.1);
+  --c0: #ce203c;
+  --c1: #6189d2;
+  --c2: #f1f860;
+  --c3: #03c2a2;
+  --c4: #5f3f9e;
+  --c5: #feae35;
+  --radius: 22px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1c1c1e;
+    --surface: #323232;
+    --board: #585858;
+    --text: #ffffff;
+    --text-secondary: #a1a1a6;
+    --line: rgba(255, 255, 255, 0.12);
+    --c0: #c13319;
+    --c1: #0c93ca;
+    --c2: #f9e938;
+    --c3: #09dfa2;
+    --c4: #6b3894;
+    --c5: #f08104;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* MARK: Header and footer */
+
+.site-header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.app-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 22.5%;
+  flex: none;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: 72px;
+  padding: 28px 0 48px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  justify-content: space-between;
+}
+
+.site-footer nav {
+  display: flex;
+  gap: 20px;
+}
+
+/* MARK: Hero */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 56px;
+  align-items: center;
+  padding: 40px 0 24px;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0 0 28px;
+  max-width: 30em;
+}
+
+/* Apple's badge artwork, unaltered (Apple marketing guidelines: at least
+   40px high onscreen, clear space of a quarter of its height). */
+.badge {
+  display: inline-block;
+  border-radius: 9px;
+}
+
+.badge img {
+  display: block;
+  height: 54px;
+  width: auto;
+}
+
+.platforms {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* MARK: Board */
+
+.play {
+  background: var(--surface);
+  border-radius: 28px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 380px;
+}
+
+.play-status {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  gap: 4px;
+  padding: 4px;
+  background: var(--board);
+  border-radius: 12px;
+  aspect-ratio: var(--columns) / var(--rows);
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  border-radius: 18%;
+  background: var(--tile);
+  color: var(--ink);
+  transition: background-color 180ms ease-out, transform 180ms ease-out;
+}
+
+.symbol {
+  width: 42%;
+  height: 42%;
+}
+
+.board.symbols-off .symbol {
+  display: none;
+}
+
+/* Symbol ink: #000 at 72% (the app's Increase Contrast value), and white
+   on purple, so every symbol has at least 3:1 against its tile. */
+[data-color] { --ink: rgba(0, 0, 0, 0.72); }
+[data-color="4"] { --ink: rgba(255, 255, 255, 0.8); }
+[data-color="0"] { --tile: var(--c0); }
+[data-color="1"] { --tile: var(--c1); }
+[data-color="2"] { --tile: var(--c2); }
+[data-color="3"] { --tile: var(--c3); }
+[data-color="4"] { --tile: var(--c4); }
+[data-color="5"] { --tile: var(--c5); }
+
+.picker {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* The edge gives every swatch 3:1 against the card, whatever its color. */
+.picker button {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 2px solid var(--text-secondary);
+  border-radius: 30%;
+  cursor: pointer;
+  background: var(--tile);
+  color: var(--ink);
+  padding: 0;
+  transition: transform 120ms ease-out, opacity 120ms;
+}
+
+.picker button:not([aria-disabled="true"]):active {
+  transform: scale(0.9);
+}
+
+.picker button[aria-disabled="true"] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.picker .symbol {
+  width: 50%;
+  height: 50%;
+}
+
+.symbols-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.symbols-toggle input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--text);
+}
+
+.play-footer {
+  margin-top: 14px;
+  min-height: 2.6em;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* MARK: Features */
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.feature {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.feature h2 {
+  font-size: 1.1rem;
+  margin: 12px 0 6px;
+}
+
+.feature p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.swatch {
+  display: flex;
+  gap: 4px;
+}
+
+.swatch span {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: var(--tile);
+}
+
+.cta {
+  text-align: center;
+  margin-top: 72px;
+}
+
+.cta h2 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin: 0 0 20px;
+}
+
+
+/* MARK: Prose */
+
+.prose {
+  max-width: 40em;
+  padding-top: 24px;
+}
+
+.prose h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+.prose h2 {
+  font-size: 1.25rem;
+  margin: 36px 0 8px;
+}
+
+.prose p {
+  margin: 0 0 14px;
+}
+
+/* MARK: Challenge */
+
+.challenge {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 56px;
+  align-items: center;
+  padding: 32px 0;
+}
+
+/* The challenge board is a preview: the friend plays it in the app or the
+   App Clip, so it's dimmed under a button that says so. */
+.preview {
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.preview .board {
+  filter: blur(1.5px) saturate(0.85);
+  opacity: 0.55;
+  transition: opacity 160ms, filter 160ms;
+}
+
+.preview:hover .board {
+  opacity: 0.7;
+  filter: blur(1px);
+}
+
+.preview-button {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--text);
+  color: var(--background);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 14px 22px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.preview-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.target {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin: 0 0 28px;
+}
+
+.target strong {
+  font-size: 2.4rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps {
+  padding-left: 1.2em;
+  color: var(--text-secondary);
+  margin: 28px 0 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 880px) {
+  .hero,
+  .challenge {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+    padding-top: 8px;
+  }
+
+  .lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .play {
+    margin: 0 auto;
+  }
+
+  .challenge .play {
+    max-width: 280px;
+  }
+
+  .steps {
+    text-align: left;
+    display: inline-block;
+  }
+}
+
+/* High contrast modes would drop the tile colors the game is played with;
+   keep them, with the symbols on top. */
+@media (forced-colors: active) {
+  .tile,
+  .picker button,
+  .swatch span {
+    forced-color-adjust: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+}
