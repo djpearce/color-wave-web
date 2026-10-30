@@ -1,9 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Color Wave - Casual Puzzles</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color Wave · A flood-fill puzzle for iPhone and iPad</title>
+  <meta name="description" content="Pick a color, watch it spread, fill the board in as few moves as you can. Daily boards, challenges with friends, and Game Center leaderboards.">
+  <meta name="apple-itunes-app" content="app-id=6464002573">
+  <meta name="theme-color" content="#ececec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Color Wave">
+  <meta property="og:title" content="Color Wave">
+  <meta property="og:description" content="Pick a color, watch it spread, fill the board in as few moves as you can.">
+  <meta property="og:url" content="https://colorwave.woodchuck.dev/">
+  <meta property="og:image" content="https://colorwave.woodchuck.dev/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
-  Hello 👋
+  <div class="wrap">
+    <header class="site-header">
+      <a href="/">
+        <img class="app-icon" src="/assets/icon.svg" alt="">
+        Color Wave
+      </a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Fill the board in as few moves as you can.</h1>
+          <p class="lede">You start in the top-left corner. Pick a color and your region takes it, spreading into every matching tile it touches. Try it here, then play the full game on iPhone and iPad.</p>
+          <a class="badge" href="https://apps.apple.com/app/id6464002573">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="162" height="54">
+          </a>
+          <p class="platforms">Free on iPhone and iPad</p>
+        </div>
+
+        <section class="play" id="demo" aria-labelledby="demo-title">
+          <h2 class="visually-hidden" id="demo-title">Try a Mini board</h2>
+          <div class="play-status">
+            <span>Mini · 7 × 7</span>
+            <span id="demo-moves">0 moves</span>
+          </div>
+          <div class="board" id="demo-board" role="img"></div>
+          <div class="picker" id="demo-picker" role="group" aria-label="Pick a color"></div>
+          <label class="symbols-toggle">
+            <input type="checkbox" id="demo-symbols" checked>
+            Show symbols
+          </label>
+          <div class="play-footer" id="demo-footer">Pick a color to start.</div>
+          <div class="visually-hidden" id="demo-announcer" role="status"></div>
+        </section>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <div class="swatch" aria-hidden="true"><span data-color="0"></span><span data-color="1"></span></div>
+          <h2>Beat par</h2>
+          <p>Every board has a par worked out for it. Classic is 10 × 15, Mini is 7 × 7.</p>
+        </div>
+        <div class="feature">
+          <div class="swatch" aria-hidden="true"><span data-color="2"></span><span data-color="3"></span></div>
+          <h2>Daily boards</h2>
+          <p>One Classic and one Mini each day, the same for everyone, with Game Center leaderboards.</p>
+        </div>
+        <div class="feature">
+          <div class="swatch" aria-hidden="true"><span data-color="4"></span><span data-color="5"></span></div>
+          <h2>Challenge friends</h2>
+          <p>Send a link to the board you just solved. They play it right away in the App Clip, no download needed.</p>
+        </div>
+        <div class="feature">
+          <div class="swatch" aria-hidden="true"><span data-color="1"></span><span data-color="3"></span></div>
+          <h2>Made for everyone</h2>
+          <p>Color symbols, themes checked for color vision deficiency, VoiceOver, Dynamic Type and Reduce Motion.</p>
+        </div>
+      </section>
+
+      <section class="cta">
+        <h2>Every board, every day, in your pocket.</h2>
+        <a class="badge" href="https://apps.apple.com/app/id6464002573">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="162" height="54">
+          </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© 2026 Dylan Pearce</span>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/privacy">Privacy</a>
+        <a href="mailto:dylan@woodchuck.dev">Contact</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script src="/assets/board.js"></script>
+  <script>
+    const boardView = document.getElementById("demo-board");
+    const picker = document.getElementById("demo-picker");
+    const movesLabel = document.getElementById("demo-moves");
+    const footer = document.getElementById("demo-footer");
+    const announcer = document.getElementById("demo-announcer");
+    const symbolsToggle = document.getElementById("demo-symbols");
+    let board;
+
+    const buttons = COLOR_NAMES.map((name, color) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.color = color;
+      button.setAttribute("aria-label", `${name}, ${SYMBOL_NAMES[color].toLowerCase()}`);
+      button.innerHTML = symbolSVG(color);
+      button.addEventListener("click", () => pick(color));
+      picker.append(button);
+      return button;
+    });
+
+    // Symbols stay on unless the visitor turns them off, and the choice is
+    // remembered.
+    symbolsToggle.checked = localStorage.getItem("symbols") !== "off";
+    function applySymbols() {
+      boardView.classList.toggle("symbols-off", !symbolsToggle.checked);
+      localStorage.setItem("symbols", symbolsToggle.checked ? "on" : "off");
+    }
+    symbolsToggle.addEventListener("change", applySymbols);
+    applySymbols();
+
+    function coverage() {
+      return `Your region covers ${board.region.size} of ${board.colors.length} tiles`;
+    }
+
+    function update(animated) {
+      updateBoard(boardView, board, animated);
+      movesLabel.textContent = plural(board.moves, "move");
+      boardView.setAttribute(
+        "aria-label",
+        `Mini board, 7 by 7. ${coverage()}, now ${COLOR_NAMES[board.activeColor].toLowerCase()}.`
+      );
+      // aria-disabled rather than disabled, so the button just pressed keeps
+      // keyboard focus.
+      buttons.forEach((button, color) => {
+        button.setAttribute("aria-disabled", board.isSolved || color === board.activeColor);
+      });
+    }
+
+    function newBoard() {
+      board = new Board("mini", randomSeed());
+      renderBoard(boardView, board);
+      footer.textContent = "Pick a color to start.";
+      update(false);
+    }
+
+    function pick(color) {
+      if (!board.move(color)) return;
+      update(true);
+      if (board.isSolved) {
+        const message = `Solved in ${plural(board.moves, "move")}.`;
+        const appLink = document.createElement("a");
+        appLink.href = "https://apps.apple.com/app/id6464002573";
+        appLink.textContent = "in the app";
+        footer.replaceChildren(`${message} Classic boards, dailies and challenges are `, appLink, ". ");
+        const again = document.createElement("button");
+        again.type = "button";
+        again.className = "link-button";
+        again.textContent = "New board";
+        again.addEventListener("click", () => {
+          newBoard();
+          buttons.find((button) => button.getAttribute("aria-disabled") === "false").focus();
+          announcer.textContent = "New board.";
+        });
+        footer.append(again);
+        announcer.textContent = message;
+        again.focus();
+      } else {
+        if (board.moves === 1) footer.textContent = "Your region grows with every move.";
+        announcer.textContent = `${COLOR_NAMES[color]}. ${plural(board.moves, "move")}. ${coverage()}.`;
+      }
+    }
+
+    newBoard();
+  </script>
 </body>
 </html>
