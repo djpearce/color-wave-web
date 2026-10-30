@@ -146,16 +146,25 @@ function updateBoard(container, board, animated = true) {
 
 // MARK: - Challenge links
 
-// `/c/` then base64url of: format version 2, mode (bit 7 set when a time
-// follows), generator version, the seed big-endian, par version, the sender's
-// moves, the time in seconds (3 bytes, if flagged), then their strip
-// (ADR-0017). Mirrors `PuzzleChallenge.decode` in the app.
-function decodeChallenge(path) {
-  const match = path.match(/^\/c\/([A-Za-z0-9_-]+)\/?$/);
-  if (!match) return null;
+// The payload of a challenge link: `/c/?b=<payload>` (ADR-0022), or the path
+// form `/c/<payload>` that TestFlight builds shared.
+function challengePayload(location) {
+  if (location.pathname === "/c/" || location.pathname === "/c") {
+    return new URLSearchParams(location.search).get("b");
+  }
+  const match = location.pathname.match(/^\/c\/([A-Za-z0-9_-]+)\/?$/);
+  return match ? match[1] : null;
+}
+
+// Base64url of: format version 2, mode (bit 7 set when a time follows),
+// generator version, the seed big-endian, par version, the sender's moves,
+// the time in seconds (3 bytes, if flagged), then their strip (ADR-0017).
+// Mirrors `PuzzleChallenge.decode` in the app.
+function decodeChallenge(payload) {
+  if (!payload || !/^[A-Za-z0-9_-]+$/.test(payload)) return null;
   let bytes;
   try {
-    const base64 = match[1].replace(/-/g, "+").replace(/_/g, "/");
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
     bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
   } catch {
     return null;

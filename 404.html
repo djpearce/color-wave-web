@@ -3,21 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Color Wave · You've been challenged</title>
-  <meta name="description" content="A friend solved this board. Can you beat their move count?">
-  <meta name="apple-itunes-app" content="app-id=6464002573, app-clip-bundle-id=dev.woodchuck.colorpuzzle.Clip, app-clip-display=card">
+  <title>Color Wave · Page not found</title>
+  <meta name="apple-itunes-app" content="app-id=6464002573">
   <meta name="theme-color" content="#ececec" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
   <meta name="robots" content="noindex">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Color Wave">
-  <meta property="og:title" content="You've been challenged">
-  <meta property="og:description" content="A friend solved this board. Can you beat their move count?">
-  <meta property="og:image" content="https://colorwave.woodchuck.dev/assets/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -33,45 +23,7 @@
     </header>
 
     <main>
-      <!-- GitHub Pages serves this page for every unknown path, which is how
-           challenge links (/c/…) land here. -->
-      <section class="challenge" id="challenge" hidden>
-        <div>
-          <h1>You've been challenged</h1>
-          <p class="lede" id="challenge-lede"></p>
-          <p class="target" id="challenge-target">
-            <strong id="challenge-moves"></strong>
-            <span id="challenge-detail"></span>
-          </p>
-          <div>
-            <a class="badge" href="https://apps.apple.com/app/id6464002573">
-            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="162" height="54">
-          </a>
-          </div>
-          <p class="platforms" id="challenge-platform"></p>
-          <ol class="steps">
-            <li>Open the board in Color Wave.</li>
-            <li>Fill it in fewer moves than your friend.</li>
-            <li>See their moves next to yours when you're done.</li>
-          </ol>
-        </div>
-
-        <div class="play">
-          <div class="play-status">
-            <span id="challenge-size"></span>
-            <span>Their board</span>
-          </div>
-          <a class="preview" href="https://apps.apple.com/app/id6464002573" aria-label="Play this board in Color Wave on the App Store">
-            <div class="board symbols-off" id="challenge-board" aria-hidden="true"></div>
-            <span class="preview-button">
-              <svg viewBox="0 0 14 14" aria-hidden="true"><path fill="currentColor" d="M3 1.5v11a.5.5 0 0 0 .77.42l8.5-5.5a.5.5 0 0 0 0-.84l-8.5-5.5A.5.5 0 0 0 3 1.5Z"/></svg>
-              Play this board
-            </span>
-          </a>
-        </div>
-      </section>
-
-      <section class="hero" id="not-found" hidden>
+      <section class="hero" id="not-found">
         <div>
           <h1>This page isn't here.</h1>
           <p class="lede">The link may be mistyped, or it came from a newer version of Color Wave.</p>
@@ -95,37 +47,10 @@
 
   <script src="/assets/board.js"></script>
   <script>
-    const challenge = decodeChallenge(location.pathname);
-
-    if (challenge) {
-      const board = new Board(challenge.style, challenge.seed);
-      const size = challenge.style === "classic" ? "Classic" : "Mini";
-      const dimensions = `${board.width} × ${board.height}`;
-
-      document.getElementById("challenge-lede").textContent =
-        `A friend solved this ${size} board. Play the same board and try to beat them.`;
-      document.getElementById("challenge-moves").textContent = challenge.moves;
-      document.getElementById("challenge-detail").textContent =
-        challenge.time === null
-          ? `${challenge.moves === 1 ? "move" : "moves"} to beat`
-          : `${challenge.moves === 1 ? "move" : "moves"} to beat · ${formatTime(challenge.time)}`;
-      document.getElementById("challenge-size").textContent = `${size} · ${dimensions}`;
-
-      renderBoard(document.getElementById("challenge-board"), board);
-
-      // iPadOS reports a Mac, so touch support tells the two apart.
-      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
-        (navigator.userAgent.includes("Macintosh") && navigator.maxTouchPoints > 1);
-      document.getElementById("challenge-platform").textContent = isIOS
-        ? "Tap Play in the card at the top to start without downloading."
-        : "Color Wave is on iPhone and iPad. Open this link on one to play.";
-
-      document.title = `Color Wave · Beat ${plural(challenge.moves, "move")}`;
-      document.getElementById("challenge").hidden = false;
-    } else {
-      document.title = "Color Wave · Page not found";
-      document.getElementById("not-found").hidden = false;
-    }
+    // TestFlight builds shared challenges as /c/<payload>, which GitHub Pages
+    // can only serve from here; send them to the challenge page (ADR-0022).
+    const payload = challengePayload(location);
+    if (payload) location.replace(`/c/?b=${payload}`);
   </script>
 </body>
 </html>
