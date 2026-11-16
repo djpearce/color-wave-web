@@ -14,7 +14,7 @@
   <meta property="og:title" content="Color Wave">
   <meta property="og:description" content="Pick a color, watch it spread, fill the board in as few moves as you can.">
   <meta property="og:url" content="https://colorwave.woodchuck.dev/">
-  <meta property="og:image" content="https://colorwave.woodchuck.dev/assets/og-image.png">
+  <meta property="og:image" content="https://colorwave.woodchuck.dev/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
@@ -23,6 +23,7 @@
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/assets/site.css">
+  <noscript><style>.board, .picker, .symbols-toggle, #demo-footer { display: none; }</style></noscript>
 
   <script type="application/ld+json">
   {
@@ -31,7 +32,7 @@
     "name": "Color Wave",
     "description": "Pick a color, watch it spread, fill the board in as few moves as you can. Daily boards, challenges with friends, and Game Center leaderboards.",
     "url": "https://colorwave.woodchuck.dev/",
-    "image": "https://colorwave.woodchuck.dev/assets/og-image.png",
+    "image": "https://colorwave.woodchuck.dev/assets/og-image.jpg",
     "operatingSystem": "iOS, iPadOS",
     "applicationCategory": "GameApplication",
     "applicationSubCategory": "Puzzle",
@@ -81,6 +82,7 @@
             Show symbols
           </label>
           <div class="play-footer" id="demo-footer">Pick a color to start.</div>
+          <noscript><p class="play-footer">Turn on JavaScript to play this board here, or play the full game in the app.</p></noscript>
           <div class="visually-hidden" id="demo-announcer" role="status"></div>
         </section>
       </section>
@@ -108,6 +110,22 @@
         </div>
       </section>
 
+      <section class="screens" aria-labelledby="screens-title">
+        <h2 class="visually-hidden" id="screens-title">In the app</h2>
+        <figure class="screen">
+          <img src="/assets/screenshots/play.jpg" width="600" height="1304" loading="lazy" alt="A Classic board seven moves in, at par 18. The yellow region has spread from the top-left corner, with the six color buttons below the board.">
+          <figcaption>Classic boards, 10 × 15</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="/assets/screenshots/symbols.jpg" width="600" height="1304" loading="lazy" alt="The same board with symbols turned on: every color has its own shape, such as a dot on red, a ring on blue and a triangle on yellow.">
+          <figcaption>A symbol for every color</figcaption>
+        </figure>
+        <figure class="screen">
+          <img src="/assets/screenshots/daily.jpg" width="600" height="1304" loading="lazy" alt="A Daily Classic solved in 18, 4 under par, second among friends today.">
+          <figcaption>Daily boards with friends</figcaption>
+        </figure>
+      </section>
+
       <section class="cta">
         <h2>Every board, every day, in your pocket.</h2>
         <a class="badge" href="https://apps.apple.com/app/id6464002573?pt=119265441&amp;ct=web-home-cta&amp;mt=8">
@@ -120,6 +138,7 @@
       <span>© 2026 Dylan Pearce</span>
       <nav aria-label="Site">
         <a href="/">Home</a>
+        <a href="/support">Support</a>
         <a href="/privacy">Privacy</a>
         <a href="mailto:dylan@woodchuck.dev">Contact</a>
       </nav>
