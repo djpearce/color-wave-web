@@ -320,6 +320,38 @@ h1 {
   background: var(--tile);
 }
 
+/* MARK: Screenshots */
+
+/* The app's own snapshot-test images (iPhone 17 Pro), light in both
+   modes: the dark ones lose their secondary text at this size. */
+.screens {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 72px;
+}
+
+.screen {
+  margin: 0;
+  text-align: center;
+}
+
+.screen img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 36px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.screen figcaption {
+  margin-top: 16px;
+  font-weight: 600;
+}
+
 .cta {
   text-align: center;
   margin-top: 72px;
@@ -455,6 +487,23 @@ h1 {
   .steps {
     text-align: left;
     display: inline-block;
+  }
+
+  /* One row that scrolls sideways, each screenshot snapping into place. */
+  .screens {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(70%, 260px);
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 56px -24px 0;
+    padding: 0 24px 24px;
+    scroll-padding: 0 24px;
+  }
+
+  .screen {
+    scroll-snap-align: start;
   }
 }
 
